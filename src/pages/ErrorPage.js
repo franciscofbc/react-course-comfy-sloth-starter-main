@@ -1,7 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, useRouteError } from 'react-router-dom';
-import { Footer, Navbar } from '../components';
+import { Footer, Navbar, Sidebar } from '../components';
+
 const ErrorPage = () => {
   const error = useRouteError();
   console.log(error);
@@ -10,6 +11,7 @@ const ErrorPage = () => {
     return (
       <>
         <Navbar />
+        <Sidebar />
         <Wrapper className="page-100">
           <section>
             <h1>{error.status}</h1>
