@@ -1,6 +1,9 @@
-import React from 'react'
+import React from 'react';
 const Error = () => {
-  return <h4>error element</h4>
-}
-
-export default Error
+  return (
+    <section className="section section-center text-center">
+      <h4>there was an error</h4>
+    </section>
+  );
+};
+export default Error;
