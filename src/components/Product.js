@@ -4,8 +4,7 @@ import { formatPrice } from '../utils/helpers';
 import { FaSearch } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const Product = ({ featuredProduct }) => {
-  const { id, name, image, price } = featuredProduct;
+const Product = ({ id, name, image, price }) => {
   return (
     <Wrapper>
       <div className="container">
