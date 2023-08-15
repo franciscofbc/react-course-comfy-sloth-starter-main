@@ -67,10 +67,17 @@ export const FilterProvider = ({ children }) => {
       value = event.target.dataset.color;
       // console.log(event.target.getAttribute('data-color'));
     }
-    console.log(name, value);
+    if (name === 'price') {
+      value = Number(value);
+    }
+    if (name === 'shipping') {
+      value = event.target.checked;
+    }
     dispatch({ type: UPDATE_FILTERS, payload: { name, value } });
   };
-  const clearFilters = () => {};
+  const clearFilters = () => {
+    dispatch({ type: CLEAR_FILTERS });
+  };
 
   return (
     <FilterContext.Provider
