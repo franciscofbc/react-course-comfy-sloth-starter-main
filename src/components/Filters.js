@@ -1,12 +1,125 @@
-import React from 'react'
-import styled from 'styled-components'
-import { useFilterContext } from '../context/filter_context'
-import { getUniqueValues, formatPrice } from '../utils/helpers'
-import { FaCheck } from 'react-icons/fa'
+import React from 'react';
+import styled from 'styled-components';
+import { useFilterContext } from '../context/filter_context';
+import { getUniqueValues, formatPrice } from '../utils/helpers';
+import { FaCheck } from 'react-icons/fa';
 
 const Filters = () => {
-  return <h4>filters</h4>
-}
+  const {
+    filters: {
+      text,
+      category,
+      company,
+      color,
+      minPrice,
+      maxPrice,
+      price,
+      shipping,
+    },
+    updateFilters,
+    clearFilters,
+    allProducts,
+  } = useFilterContext();
+
+  const categories = getUniqueValues(allProducts, 'category');
+  const companies = getUniqueValues(allProducts, 'company');
+  const colors = getUniqueValues(allProducts, 'colors');
+
+  return (
+    <Wrapper>
+      <div className="content">
+        <form onSubmit={(event) => event.preventDefault()}>
+          {/* input search */}
+          <div className="form-control">
+            <input
+              type="text"
+              name="text"
+              className="search-input"
+              placeholder="search"
+              value={text}
+              onChange={updateFilters}
+            />
+          </div>
+          {/* end of input search */}
+          {/* category */}
+          <div className="form-control">
+            <h5>category</h5>
+            {categories.map((categoryMap, index) => {
+              return (
+                <button
+                  type="button"
+                  key={index}
+                  onClick={updateFilters}
+                  name="category"
+                  className={categoryMap === category ? 'active' : ''}
+                >
+                  {categoryMap}
+                </button>
+              );
+            })}
+          </div>
+          {/* end of category */}
+          {/* company */}
+          <div className="form-control">
+            <h5>company</h5>
+            <select
+              name="company"
+              value={company}
+              onChange={updateFilters}
+              className="company"
+            >
+              {companies.map((companyMap, index) => {
+                return (
+                  <option value={companyMap} key={index}>
+                    {companyMap}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
+          {/* end of company */}
+          {/* colors */}
+          <div className="form-control">
+            <h5>colors</h5>
+            <div className="colors">
+              {colors.map((colorMap, index) => {
+                const isActiveColor = color === colorMap;
+                if (colorMap === 'all') {
+                  return (
+                    <button
+                      type="button"
+                      key={index}
+                      name="color"
+                      className={isActiveColor ? 'all-btn active' : 'all-btn'}
+                      data-color={colorMap}
+                      onClick={updateFilters}
+                    >
+                      all
+                    </button>
+                  );
+                }
+                return (
+                  <button
+                    type="button"
+                    key={index}
+                    name="color"
+                    style={{ background: colorMap }}
+                    className={isActiveColor ? 'color-btn active' : 'color-btn'}
+                    data-color={colorMap}
+                    onClick={updateFilters}
+                  >
+                    {isActiveColor && <FaCheck />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          {/* end of colors */}
+        </form>
+      </div>
+    </Wrapper>
+  );
+};
 
 const Wrapper = styled.section`
   .form-control {
@@ -106,6 +219,6 @@ const Wrapper = styled.section`
       top: 1rem;
     }
   }
-`
+`;
 
-export default Filters
+export default Filters;

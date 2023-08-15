@@ -40,8 +40,9 @@ export const FilterProvider = ({ children }) => {
   }, [products]);
 
   useEffect(() => {
+    dispatch({ type: FILTER_PRODUCTS });
     dispatch({ type: SORT_PRODUCTS });
-  }, [products, state.sort]);
+  }, [products, state.sort, state.filters]);
 
   const setListView = () => {
     dispatch({ type: SET_LISTVIEW });
@@ -56,9 +57,31 @@ export const FilterProvider = ({ children }) => {
     dispatch({ type: UPDATE_SORT, payload: { value } });
   };
 
+  const updateFilters = (event) => {
+    let name = event.target.name;
+    let value = event.target.value;
+    if (name === 'category') {
+      value = event.target.textContent;
+    }
+    if (name === 'color') {
+      value = event.target.dataset.color;
+      // console.log(event.target.getAttribute('data-color'));
+    }
+    console.log(name, value);
+    dispatch({ type: UPDATE_FILTERS, payload: { name, value } });
+  };
+  const clearFilters = () => {};
+
   return (
     <FilterContext.Provider
-      value={{ ...state, setListView, setGridView, updateSort }}
+      value={{
+        ...state,
+        setListView,
+        setGridView,
+        updateSort,
+        updateFilters,
+        clearFilters,
+      }}
     >
       {children}
     </FilterContext.Provider>

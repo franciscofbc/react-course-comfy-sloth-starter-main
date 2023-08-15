@@ -31,6 +31,7 @@ const filter_reducer = (state, action) => {
   if (action.type === UPDATE_SORT) {
     return { ...state, sort: action.payload.value };
   }
+
   if (action.type === SORT_PRODUCTS) {
     //copy the values from the state
     let newFilteredProducts = [...state.filteredProducts];
@@ -59,6 +60,16 @@ const filter_reducer = (state, action) => {
     }
 
     return { ...state, filteredProducts: newFilteredProducts };
+  }
+
+  if (action.type === UPDATE_FILTERS) {
+    const { name, value } = action.payload;
+    return { ...state, filters: { ...state.filters, [name]: value } };
+  }
+
+  if (action.type === FILTER_PRODUCTS) {
+    console.log('filter products');
+    return { ...state };
   }
 
   throw new Error(`No Matching "${action.type}" - action type`);
