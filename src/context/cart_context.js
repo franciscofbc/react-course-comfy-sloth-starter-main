@@ -9,6 +9,7 @@ import {
 } from '../actions';
 
 const getLocalStorage = () => {
+  // localStorage.removeItem('cart');
   let cart = localStorage.getItem('cart');
   if (cart) {
     return JSON.parse(cart);
@@ -29,6 +30,7 @@ export const CartProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   useEffect(() => {
+    dispatch({ type: COUNT_CART_TOTALS });
     localStorage.setItem('cart', JSON.stringify(state.cart));
   }, [state.cart]);
 
@@ -40,7 +42,9 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: REMOVE_CART_ITEM, payload: { id } });
   };
 
-  const toggleAmount = (id, value) => {};
+  const toggleAmount = (id, value) => {
+    dispatch({ type: TOGGLE_CART_ITEM_AMOUNT, payload: { id, value } });
+  };
 
   const clearCart = () => {
     dispatch({ type: CLEAR_CART });
