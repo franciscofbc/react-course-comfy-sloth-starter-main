@@ -5,6 +5,7 @@ import {
   CheckoutPage,
   ErrorPage,
   HomePage,
+  PrivateRoute,
   ProductsPage,
   SharedPage,
   SingleProductPage,
@@ -38,7 +39,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'checkout',
-        element: <CheckoutPage />,
+        element: (
+          <PrivateRoute>
+            <CheckoutPage />
+          </PrivateRoute>
+        ),
       },
     ],
   },
