@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { Error, Loading } from '../components';
 
 const AuthWrapper = ({ children }) => {
@@ -17,10 +17,10 @@ const AuthWrapper = ({ children }) => {
   return <>{children}</>;
 };
 
-const Wrapper = styled.section`
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-`;
+// const Wrapper = styled.section`
+//   min-height: 100vh;
+//   display: grid;
+//   place-items: center;
+// `;
 
 export default AuthWrapper;
