@@ -63,37 +63,76 @@ const CheckoutForm = () => {
     createPaymentIntent();
   }, []);
 
-  const handleChange = (event) => {};
-  const handleSubmit = (event) => {};
+  const handleChange = (event) => {
+    setDisabled(event.empty);
+    setError(event.error ? event.error.message : '');
+  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setProcessing(true);
+    const payload = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: elements.getElement(CardElement),
+      },
+    });
+    if (payload.error) {
+      setError(`payment failed ${payload.error.message}`);
+      setProcessing(false);
+    } else {
+      setError(null);
+      setProcessing(false);
+      setSucceeded(true);
+
+      setTimeout(() => {
+        clearCart();
+        navigate('/');
+      }, 6000);
+    }
+  };
 
   return (
-    <div>
+    <div className="section page">
+      {succeeded ? (
+        <article>
+          <h4>thank you</h4>
+          <h4>your payment was successful</h4>
+          <h4>redirecting to home page shortly</h4>
+          {/* <div className="loading" style={{ marginTop: '1rem' }}></div> */}
+        </article>
+      ) : (
+        <article>
+          <h4>hello, {myUser?.name}</h4>
+          <p>your total is {formatPrice(totalAmount + shippingFee)}</p>
+          <p>test card number: 4242 4242 4242 4242</p>
+        </article>
+      )}
+
       <form id="payment-form" onSubmit={handleSubmit}>
         <CardElement
           id="card-element"
           options={cardStyle}
           onChange={handleChange}
         />
+        <button disabled={succeeded || processing || disabled} id="submit">
+          <span className="button-text">
+            {processing ? <div className="spinner" id="spinner"></div> : 'Pay'}
+          </span>
+        </button>
+        {/* show any error that happens when processing the payment */}
+        {error && (
+          <div className="card-error" role="alert">
+            {error}
+          </div>
+        )}
+        {/* show a suceess message upon completion */}
+        <p className={succeeded ? 'result-message' : 'result-message hidden'}>
+          payment succeed, see the result in your
+          <a href={`https://dashboard.stripe.com/test/payments`}>
+            stripe dashboard
+          </a>
+          refresh the page to pay again
+        </p>
       </form>
-      <button disabled={succeeded || processing || disabled} id="submit">
-        <span className="button-text">
-          {processing ? <div className="spinner" id="spinner"></div> : 'Pay'}
-        </span>
-      </button>
-      {/* show any error that happens when processing the payment */}
-      {error && (
-        <div className="card-error" role="alert">
-          {error}
-        </div>
-      )}
-      {/* show a suceess message upon completion */}
-      <p className={succeeded ? 'result-message' : 'result-message hidden'}>
-        payment succeed, see the result in your
-        <a href={`https://dashboard.stripe.com/test/payments`}>
-          stripe dashboard
-        </a>
-        refresh the page to pay again
-      </p>
     </div>
   );
 };
